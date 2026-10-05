@@ -189,6 +189,8 @@
       animation: arrive 320ms ease both;
     }
 
+    .person.no-photo { grid-template-columns: minmax(0, 1fr); }
+
     .person img {
       display: block;
       grid-column: 2;
@@ -317,8 +319,8 @@
   <footer>Center for Neural Science</footer>
 
   <script>
-    const csvPath = "sources/CNS Student_PostDoc Information (Responses) - Form Responses 1.csv";
-    const imagePath = "sources/GJB_small.jpg";
+    const csvPath = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRI-bsWtUw-xHXXn8wznvhXg3htUK4281nrDdDYrPe5OMFqlmdfYaA8GPQ-gic2QFSq7jyiNGi9bnl3/pub?gid=1236118581&single=true&output=csv";
+    const imagePath = "sources/no_image.png";
     const directory = document.querySelector("#directory");
     const searchInput = document.querySelector("#search");
     const roleFilter = document.querySelector("#role-filter");
@@ -347,7 +349,7 @@
       { aliases: ["Dayu Lin", "Lin"], url: "https://med.nyu.edu/faculty/dayu-lin" },
       { aliases: ["Michael Long", "Long"], url: "https://med.nyu.edu/faculty/michael-a-long" },
       { aliases: ["Wei Ji Ma"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.weiji-ma.html" },
-      { aliases: ["J. Anthony Movshon", "Anthony Movshon", "Movshon"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.j-anthony-movshon.html" },
+      { aliases: ["J. Anthony Movshon", "Anthony Movshon", "Tony Movshon", "Movshon"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.j-anthony-movshon.html" },
       { aliases: ["Alice Mosberger", "Mosberger"], url: "https://med.nyu.edu/faculty/alice-c-mosberger" },
       { aliases: ["Anders Nelson", "Nelson"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.anders-nelson.html" },
       { aliases: ["Katherine Nagel", "Nagel"], url: "https://med.nyu.edu/faculty/katherine-nagel" },
@@ -487,12 +489,13 @@
       });
       const cutoff = archiveCutoff(archiveAgeMonths);
       const archivedPeople = matchingPeople.filter((person) => person.timestamp && person.timestamp < cutoff);
+      const currentPeople = matchingPeople.filter((person) => !person.timestamp || person.timestamp >= cutoff);
       const visible = showArchivedInput.checked
-        ? matchingPeople
-        : matchingPeople.filter((person) => !person.timestamp || person.timestamp >= cutoff);
+        ? archivedPeople
+        : currentPeople;
       resultCount.textContent = `${visible.length} ${visible.length === 1 ? "person" : "people"}`;
       archiveSummary.textContent = showArchivedInput.checked
-        ? `${archivedPeople.length} archived included`
+        ? "Showing archived profiles"
         : `${archivedPeople.length} archived hidden`;
       directory.replaceChildren();
 
@@ -522,6 +525,10 @@
           const image = document.createElement("img");
           image.src = imagePath;
           image.alt = `Placeholder portrait for ${person.name}`;
+          image.addEventListener("error", () => {
+            image.remove();
+            article.classList.add("no-photo");
+          }, { once: true });
           article.append(image);
 
           const details = document.createElement("div");
@@ -599,13 +606,10 @@
         roleFilter.addEventListener("change", () => render(people));
         showArchivedInput.addEventListener("change", () => render(people));
       } catch (error) {
-        resultCount.textContent = "Directory unavailable";
+        resultCount.textContent = "";
         const message = document.createElement("p");
         message.className = "load-error";
-        message.append("The directory could not load its CSV data. Open this page through a local web server from the project folder, for example ");
-        const command = document.createElement("code");
-        command.textContent = "python -m http.server";
-        message.append(command, ".");
+        message.textContent = "Trainee directory data failed to load. Please contact CNS IT";
         directory.replaceChildren(message);
         console.error("Unable to load trainee directory", error);
       }
