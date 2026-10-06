@@ -1,0 +1,562 @@
+{
+  "generatedAt": "2026-10-06T16:16:53.687Z",
+  "sources": [
+    {
+      "name": "NYU CNS Core Faculty",
+      "url": "https://as.nyu.edu/departments/cns/people/CoreFaculty.html",
+      "profiles": 35
+    },
+    {
+      "name": "NYU Langone Neuroscience Faculty",
+      "url": "https://med.nyu.edu/departments-institutes/neuroscience/faculty",
+      "profiles": 77
+    }
+  ],
+  "faculty": [
+    {
+      "name": "Adam Carter",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.adam-carter.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Adam Mar",
+      "url": "https://med.nyu.edu/faculty/adam-mar",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Alex Reyes",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.alexander-reyes.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Alex Williams",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.alex-williams.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Alice Mosberger",
+      "url": "https://med.nyu.edu/faculty/alice-c-mosberger",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Allal Boutajangout",
+      "url": "https://med.nyu.edu/faculty/allal-boutajangout",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Anders Nelson",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.anders-nelson.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "André A. Fenton",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.andre-fenton.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Andrea Brand",
+      "url": "https://med.nyu.edu/faculty/andrea-h-brand",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Aravinda Chakravarti",
+      "url": "https://med.nyu.edu/faculty/aravinda-chakravarti",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Aristides A. Patrinos",
+      "url": "https://med.nyu.edu/faculty/aristides-a-patrinos",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Arjun Masukar",
+      "url": "https://nyulangone.org/doctors/1144464413/arjun-v-masurkar",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Bernardo Rudy",
+      "url": "https://med.nyu.edu/faculty/bernardo-rudy",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Biyu He",
+      "url": "https://med.nyu.edu/faculty/biyu-j-he",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Brian L. Schmidt",
+      "url": "https://nyulangone.org/doctors/1417906777/brian-l-schmidt",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Carla Nasca",
+      "url": "https://med.nyu.edu/faculty/carla-nasca",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Chengzu Long",
+      "url": "https://med.nyu.edu/faculty/chengzu-long",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Chiye Aoki",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.chiye-aoki.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Christine Constantinople",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.christine-constantinople.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Claude Desplan",
+      "url": "https://med.nyu.edu/faculty/claude-desplan",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Cristina M. Alberini",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.cristina-maria-alberini.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Cristina Savin",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.cristina-savin.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Dan Sanes",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.dan-h-sanes.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Daniel K. Sodickson",
+      "url": "https://med.nyu.edu/faculty/daniel-k-sodickson",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Danique Jeurissen",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.danique-jeurissen.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "David Heeger",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.david-j-heeger.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "David S. Goldfarb",
+      "url": "https://nyulangone.org/doctors/1629018908/david-s-goldfarb",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "David Schneider",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.david-schneider.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "David Schoppik",
+      "url": "https://med.nyu.edu/faculty/david-schoppik",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "David W. McLaughlin",
+      "url": "https://med.nyu.edu/faculty/david-w-mclaughlin",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Dayu Lin",
+      "url": "https://med.nyu.edu/faculty/dayu-lin",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Dmitri Chklovskii",
+      "url": "https://med.nyu.edu/faculty/dmitri-chklovskii",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Dmitry Rinberg",
+      "url": "https://med.nyu.edu/faculty/dmitry-rinberg",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Donald A. Wilson",
+      "url": "https://med.nyu.edu/faculty/donald-a-wilson",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Dora Angelaki",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.dora-angelaki.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Eero Simoncelli",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.eero-p-simoncelli.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Einar Sigurdsson",
+      "url": "https://med.nyu.edu/faculty/einar-m-sigurdsson",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Emily Bayer",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.emily-bayer.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Eric Klann",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.eric-klann.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Eric Lang",
+      "url": "https://med.nyu.edu/faculty/eric-j-lang",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Erin E. Congdon",
+      "url": "https://med.nyu.edu/faculty/erin-e-congdon",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Erin Rich",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.erin-rich.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Francisco X. Castellanos",
+      "url": "https://med.nyu.edu/faculty/francisco-x-castellanos",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Gilad Evrony",
+      "url": "https://med.nyu.edu/faculty/gilad-d-evrony",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Glenn I. Fishman",
+      "url": "https://med.nyu.edu/faculty/glenn-i-fishman",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Gregory E. Morley",
+      "url": "https://med.nyu.edu/faculty/gregory-e-morley",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Guoling Tian",
+      "url": "https://med.nyu.edu/faculty/guoling-tian",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Gyorgy Buzsaki",
+      "url": "https://med.nyu.edu/faculty/gyorgy-buzsaki",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Hannah Payne",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.hannah-payne.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Heather M. McKellar",
+      "url": "https://med.nyu.edu/faculty/heather-m-mckellar",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Helen Scharfman",
+      "url": "https://med.nyu.edu/faculty/helen-e-scharfman",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Ilya A. Kruglikov",
+      "url": "https://med.nyu.edu/faculty/ilya-a-kruglikov",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "J. Anthony Movshon",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.j-anthony-movshon.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "James C. Beck",
+      "url": "https://med.nyu.edu/faculty/james-c-beck",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "James Salzer",
+      "url": "https://med.nyu.edu/faculty/james-l-salzer",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Javier Emperador Melero",
+      "url": "https://med.nyu.edu/faculty/javier-emperador-melero",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Jayeeta Basu",
+      "url": "https://med.nyu.edu/faculty/jayeeta-basu",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Jeremy Dasen",
+      "url": "https://med.nyu.edu/faculty/jeremy-s-dasen",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Jing Wang",
+      "url": "https://nyulangone.org/doctors/1639348733/jing-wang",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "JingJing Liu",
+      "url": "https://med.nyu.edu/faculty/jingjing-liu",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Joe Ledoux",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.joseph-e-ledoux.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "John C. Nicholson",
+      "url": "https://med.nyu.edu/faculty/john-c-nicholson",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "John Pearson",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.john-pearson.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "John Rinzel",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.john-rinzel.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Kalman Rubinson",
+      "url": "https://med.nyu.edu/faculty/kalman-rubinson",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Katherine Nagel",
+      "url": "https://med.nyu.edu/faculty/katherine-nagel",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Kelvin Quinones-Laracuente",
+      "url": "https://med.nyu.edu/faculty/kelvin-quinones-laracuente",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Kenway Louie",
+      "url": "https://med.nyu.edu/faculty/kenway-louie",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Leon Axel",
+      "url": "https://nyulangone.org/doctors/1821052226/leon-axel",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Lucas Tian",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.lucas-tian.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Lucy C. Norcliffe-Kaufmann",
+      "url": "https://med.nyu.edu/faculty/lucy-j-norcliffe-kaufmann",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Lynne Kiorpes",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.lynne-kiorpes.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Margaret Rice",
+      "url": "https://med.nyu.edu/faculty/margaret-e-rice",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Mario Svirsky",
+      "url": "https://med.nyu.edu/faculty/mario-a-svirsky",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Michael Hawken",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.michael-hawken.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Michael Long",
+      "url": "https://med.nyu.edu/faculty/michael-a-long",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Molly Gale Hammell",
+      "url": "https://med.nyu.edu/faculty/molly-c-gale-hammell",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Moses Chao",
+      "url": "https://med.nyu.edu/faculty/moses-v-chao",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Neville Sanjana",
+      "url": "https://med.nyu.edu/faculty/neville-sanjana",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Niels Ringstad",
+      "url": "https://med.nyu.edu/faculty/niels-ringstad",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Nigel W. Bunnett",
+      "url": "https://med.nyu.edu/faculty/nigel-w-bunnett",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Orna Issler",
+      "url": "https://med.nyu.edu/faculty/orna-issler",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Paul Glimcher",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.paul-glimcher.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Richard Tsien",
+      "url": "https://med.nyu.edu/faculty/richard-tsien",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Robert Froemke",
+      "url": "https://med.nyu.edu/faculty/robert-c-froemke",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Robert G. Baker",
+      "url": "https://med.nyu.edu/faculty/robert-g-baker",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Robert P. Machold",
+      "url": "https://med.nyu.edu/faculty/robert-p-machold",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Robert Shapley",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.robert-shapley.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Rodolfo Llinas",
+      "url": "https://med.nyu.edu/faculty/rodolfo-llinas",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Roozbeh Kiani",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.roozbeh-kiani.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Rory Coleman",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.rory-coleman.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Shane Liddelow",
+      "url": "https://med.nyu.edu/faculty/shane-a-liddelow",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Shy Shoham",
+      "url": "https://med.nyu.edu/faculty/shy-shoham",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Stephen D. Ginsberg",
+      "url": "https://med.nyu.edu/faculty/stephen-d-ginsberg",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Stephen X. Zhang",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.stephen-zhang.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Sumantra Chatterjee",
+      "url": "https://med.nyu.edu/faculty/sumantra-chatterjee",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Tanya Sippy",
+      "url": "https://med.nyu.edu/faculty/tanya-c-sippy",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Thomas J. Carew",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.thomas-j-carew.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Thomas Neubert",
+      "url": "https://med.nyu.edu/faculty/thomas-a-neubert",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Thong C. Ma",
+      "url": "https://med.nyu.edu/faculty/thong-c-ma",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Un Kang",
+      "url": "https://med.nyu.edu/research/kang-lab/",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Wei Ji Ma",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.weiji-ma.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Wendy Suzuki",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.wendy-suzuki.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "William A. Coetzee",
+      "url": "https://med.nyu.edu/faculty/william-a-coetzee",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Xiao-Jing Wang",
+      "url": "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.xiaojing-wang.html",
+      "source": "NYU CNS Core Faculty"
+    },
+    {
+      "name": "Yan Lin",
+      "url": "https://med.nyu.edu/faculty/yan-lin",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Yanqing Zhang",
+      "url": "https://med.nyu.edu/faculty/yanqing-zhang",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Yoko Bekku",
+      "url": "https://med.nyu.edu/faculty/yoko-bekku",
+      "source": "NYU Langone Neuroscience Faculty"
+    },
+    {
+      "name": "Zhe Chen",
+      "url": "https://med.nyu.edu/faculty/zhe-s-chen",
+      "source": "NYU Langone Neuroscience Faculty"
+    }
+  ]
+}

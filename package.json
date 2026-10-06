@@ -1,0 +1,11 @@
+{
+  "name": "cns-trainee-directory",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update:faculty": "node scripts/update-faculty-directory.mjs"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0"
+  }
+}

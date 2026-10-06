@@ -320,6 +320,7 @@
 
   <script>
     const csvPath = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRI-bsWtUw-xHXXn8wznvhXg3htUK4281nrDdDYrPe5OMFqlmdfYaA8GPQ-gic2QFSq7jyiNGi9bnl3/pub?gid=1236118581&single=true&output=csv";
+    const facultyRosterPath = "sources/faculty-directory.json";
     const imagePath = "sources/no_image.png";
     const directory = document.querySelector("#directory");
     const searchInput = document.querySelector("#search");
@@ -328,62 +329,119 @@
     const showArchivedInput = document.querySelector("#show-archived");
     const archiveSummary = document.querySelector("#archive-summary");
     const archiveAgeMonths = 12;
-    const facultyLinks = [
-      { aliases: ["Jayeeta Basu", "Basu"], url: "https://med.nyu.edu/faculty/jayeeta-basu" },
-      { aliases: ["György Buzsáki", "Gyorgy Buzsaki", "Buzsáki", "Buzsaki"], url: "https://med.nyu.edu/faculty/gyorgy-buzsaki" },
-      { aliases: ["Claude Desplan", "Desplan"], url: "https://med.nyu.edu/faculty/claude-desplan" },
-      { aliases: ["Robert Froemke", "Froemke"], url: "https://med.nyu.edu/faculty/robert-c-froemke" },
-      { aliases: ["Cristina M. Alberini", "Cristina Alberini", "Alberini"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.cristina-maria-alberini.html" },
-      { aliases: ["Dora Angelaki", "Angelaki"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.dora-angelaki.html" },
-      { aliases: ["Adam Carter", "Carter"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.adam-carter.html" },
-      { aliases: ["Christine Constantinople", "Constantinople"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.christine-constantinople.html" },
-      { aliases: ["André A. Fenton", "Andre Fenton", "André Fenton", "Fenton"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.andre-fenton.html" },
-      { aliases: ["Paul Glimcher", "Glimcher"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.paul-glimcher.html" },
-      { aliases: ["Biyu He", "He"], url: "https://med.nyu.edu/faculty/biyu-j-he" },
-      { aliases: ["Michael Hawken", "Hawken"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.michael-hawken.html" },
-      { aliases: ["David Heeger", "Heeger"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.david-j-heeger.html" },
-      { aliases: ["Danique Jeurissen", "Jeurissen"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.danique-jeurissen.html" },
-      { aliases: ["Orna Issler", "Issler"], url: "https://med.nyu.edu/faculty/orna-issler" },
-      { aliases: ["Roozbeh Kiani", "Kiani"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.roozbeh-kiani.html" },
-      { aliases: ["Eric Klann", "Klann"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.eric-klann.html" },
-      { aliases: ["Dayu Lin", "Lin"], url: "https://med.nyu.edu/faculty/dayu-lin" },
-      { aliases: ["Michael Long", "Long"], url: "https://med.nyu.edu/faculty/michael-a-long" },
-      { aliases: ["Wei Ji Ma"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.weiji-ma.html" },
-      { aliases: ["J. Anthony Movshon", "Anthony Movshon", "Tony Movshon", "Movshon"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.j-anthony-movshon.html" },
-      { aliases: ["Alice Mosberger", "Mosberger"], url: "https://med.nyu.edu/faculty/alice-c-mosberger" },
-      { aliases: ["Anders Nelson", "Nelson"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.anders-nelson.html" },
-      { aliases: ["Katherine Nagel", "Nagel"], url: "https://med.nyu.edu/faculty/katherine-nagel" },
-      { aliases: ["Erin Rich", "Rich"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.erin-rich.html" },
-      { aliases: ["Dan Sanes", "Sanes"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.dan-h-sanes.html" },
-      { aliases: ["Cristina Savin", "Savin"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.cristina-savin.html" },
-      { aliases: ["David Schneider", "Schneider"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.david-schneider.html" },
-      { aliases: ["David Schoppik", "Schoppik"], url: "https://med.nyu.edu/faculty/david-schoppik" },
-      { aliases: ["Eero Simoncelli", "Simoncelli"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.eero-p-simoncelli.html" },
-      { aliases: ["Einar Sigurdsson", "Sigurdsson"], url: "https://med.nyu.edu/faculty/einar-m-sigurdsson" },
-      { aliases: ["Tanya Sippy", "Sippy"], url: "https://med.nyu.edu/faculty/tanya-c-sippy" },
-      { aliases: ["Dmitry Rinberg", "Rinberg"], url: "https://med.nyu.edu/faculty/dmitry-rinberg" },
-      { aliases: ["Niels Ringstad", "Ringstad"], url: "https://med.nyu.edu/faculty/niels-ringstad" },
-      { aliases: ["Shane Liddelow", "Liddelow"], url: "https://med.nyu.edu/faculty/shane-a-liddelow" },
-      { aliases: ["Jing Wang"], url: "https://nyulangone.org/doctors/1639348733/jing-wang" },
-      { aliases: ["Xiao-Jing Wang", "Xiao Jing Wang"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.xiaojing-wang.html" },
-      { aliases: ["Alex Williams", "Williams"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.alex-williams.html" },
-      { aliases: ["Stephen X. Zhang", "Stephen Zhang", "Zhang"], url: "https://as.nyu.edu/content/nyu-as/as/departments/cns/people/faculty.stephen-zhang.html" },
+    let facultyAliasLookup = new Map();
+    let facultyAliasPattern = null;
+    const facultyAliasOverrides = [
+      { alias: "Tony Movshon", name: "J. Anthony Movshon" },
     ];
 
+    function normalizeFacultyName(name) {
+      return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+    }
+
+    function normalizeWithOffsets(value) {
+      const characters = [];
+      const sourceStarts = [];
+      const sourceEnds = [];
+      for (let offset = 0; offset < value.length;) {
+        const sourceCharacter = String.fromCodePoint(value.codePointAt(offset));
+        const nextOffset = offset + sourceCharacter.length;
+        const normalizedCharacters = sourceCharacter.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
+        for (const character of normalizedCharacters) {
+          const normalizedCharacter = /[\p{L}\p{N}]/u.test(character) ? character : " ";
+          if (normalizedCharacter === " " && (!characters.length || characters.at(-1) === " ")) {
+            if (characters.length) sourceEnds[sourceEnds.length - 1] = nextOffset;
+            continue;
+          }
+          characters.push(normalizedCharacter);
+          sourceStarts.push(offset);
+          sourceEnds.push(nextOffset);
+        }
+        offset = nextOffset;
+      }
+      while (characters.at(-1) === " ") {
+        characters.pop();
+        sourceStarts.pop();
+        sourceEnds.pop();
+      }
+      return { text: characters.join(""), sourceStarts, sourceEnds };
+    }
+
+    function buildFacultyMatcher(facultyDirectory) {
+      const facultyByName = new Map();
+      for (const person of facultyDirectory) {
+        const key = normalizeFacultyName(person.name);
+        if (key && !facultyByName.has(key)) facultyByName.set(key, person);
+      }
+
+      const surnameCounts = new Map();
+      for (const person of facultyByName.values()) {
+        const surname = normalizeFacultyName(person.name).split(" ").at(-1);
+        surnameCounts.set(surname, (surnameCounts.get(surname) || 0) + 1);
+      }
+
+      const aliases = new Map();
+      const ambiguousAliases = new Set();
+      const addAlias = (alias, person) => {
+        const key = normalizeFacultyName(alias);
+        if (!key || ambiguousAliases.has(key)) return;
+        const existing = aliases.get(key);
+        if (!existing) aliases.set(key, person);
+        else if (existing.url !== person.url) {
+          aliases.delete(key);
+          ambiguousAliases.add(key);
+        }
+      };
+
+      for (const person of facultyByName.values()) {
+        const nameParts = person.name.split(/\s+/);
+        const first = nameParts[0];
+        const surname = nameParts.at(-1);
+        const variants = new Set([
+          person.name,
+          `${first} ${surname}`,
+          person.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
+          `${first.normalize("NFD").replace(/[\u0300-\u036f]/g, "")} ${surname.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`,
+        ]);
+        for (const alias of variants) addAlias(alias, person);
+        if (surnameCounts.get(normalizeFacultyName(surname)) === 1) addAlias(surname, person);
+      }
+
+      for (const override of facultyAliasOverrides) {
+        const person = [...facultyByName.values()].find((entry) => normalizeFacultyName(entry.name) === normalizeFacultyName(override.name));
+        if (person) addAlias(override.alias, person);
+      }
+
+      facultyAliasLookup = aliases;
+      const patterns = [...facultyAliasLookup.keys()]
+        .sort((a, b) => b.length - a.length)
+        .map((alias) => alias.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+      facultyAliasPattern = patterns.length
+        ? new RegExp(`(^| )(${patterns.join("|")})(?=$| )`, "giu")
+        : null;
+    }
+
     function appendLabLinks(container, lab) {
-      const aliases = facultyLinks.flatMap((faculty) => faculty.aliases.map((alias) => ({ alias, url: faculty.url })))
-        .sort((a, b) => b.alias.length - a.alias.length);
-      const pattern = new RegExp(`(^|[^\\p{L}\\p{N}])(${aliases.map(({ alias }) => alias.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")).join("|")})(?=$|[^\\p{L}\\p{N}])`, "giu");
+      if (!facultyAliasPattern) {
+        container.textContent = lab;
+        return;
+      }
+      const normalizedLab = normalizeWithOffsets(lab);
       let cursor = 0;
-      for (const match of lab.matchAll(pattern)) {
-        const start = match.index + match[1].length;
+      for (const match of normalizedLab.text.matchAll(facultyAliasPattern)) {
+        const normalizedStart = match.index + match[1].length;
+        const normalizedEnd = normalizedStart + match[2].length;
+        const start = normalizedLab.sourceStarts[normalizedStart];
+        const end = normalizedLab.sourceEnds[normalizedEnd - 1];
         container.append(document.createTextNode(lab.slice(cursor, start)));
-        const faculty = aliases.find(({ alias }) => alias.toLocaleLowerCase() === match[2].toLocaleLowerCase());
+        const faculty = facultyAliasLookup.get(match[2]);
         const link = document.createElement("a");
-        link.href = faculty.url;
-        link.textContent = match[2];
-        container.append(link);
-        cursor = start + match[2].length;
+        if (faculty && start >= cursor && end > start) {
+          link.href = faculty.url;
+          link.textContent = lab.slice(start, end);
+          container.append(link);
+          cursor = end;
+        }
       }
       container.append(document.createTextNode(lab.slice(cursor)));
     }
@@ -590,6 +648,15 @@
     }
 
     async function loadDirectory() {
+      try {
+        const facultyResponse = await fetch(facultyRosterPath);
+        if (!facultyResponse.ok) throw new Error(`Faculty roster request returned ${facultyResponse.status}`);
+        const facultyRoster = await facultyResponse.json();
+        buildFacultyMatcher(Array.isArray(facultyRoster.faculty) ? facultyRoster.faculty : []);
+      } catch (error) {
+        console.warn("Unable to load faculty profile links", error);
+      }
+
       try {
         const response = await fetch(csvPath);
         if (!response.ok) throw new Error(`CSV request returned ${response.status}`);
