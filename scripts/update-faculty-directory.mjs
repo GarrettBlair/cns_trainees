@@ -1,4 +1,5 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
+import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import * as cheerio from "cheerio";
@@ -83,6 +84,53 @@ for (const { faculty } of results) {
   }
 }
 
+let existingFaculty = [];
+try {
+  existingFaculty = JSON.parse(await readFile(outputPath, "utf8")).faculty ?? [];
+} catch (error) {
+  if (error.code !== "ENOENT") throw error;
+}
+const existing = new Map(existingFaculty.map((entry) => [identityKey(entry.name), entry]));
+
+const additions = [...combined].filter(([key]) => !existing.has(key));
+const removals = [...existing].filter(([key]) => !combined.has(key));
+
+const interactive = process.stdin.isTTY && process.stdout.isTTY;
+const prompt = interactive ? createInterface({ input: process.stdin, output: process.stdout }) : null;
+
+// Empty input or a non-interactive run takes the default.
+async function confirm(question, defaultYes) {
+  if (!prompt) return defaultYes;
+  const answer = (await prompt.question(`${question} ${defaultYes ? "[Y/n]" : "[y/N]"} `)).trim().toLowerCase();
+  if (!answer) return defaultYes;
+  return answer === "y" || answer === "yes";
+}
+
+const describe = (entry) => `  ${entry.name} (${entry.source}) ${entry.url}`;
+const final = new Map(combined);
+
+if (existingFaculty.length && !interactive && (additions.length || removals.length)) {
+  console.log("Non-interactive run: adding new faculty and keeping removed faculty.");
+}
+
+if (existingFaculty.length && additions.length) {
+  console.log(`\n${additions.length} new faculty found:`);
+  for (const [, entry] of additions) console.log(describe(entry));
+  if (!(await confirm("Add these faculty?", true))) {
+    for (const [key] of additions) final.delete(key);
+  }
+}
+
+if (removals.length) {
+  console.log(`\n${removals.length} faculty no longer found in the directories:`);
+  for (const [, entry] of removals) console.log(describe(entry));
+  if (!(await confirm("Remove these faculty from the roster?", false))) {
+    for (const [key, entry] of removals) final.set(key, entry);
+  }
+}
+
+prompt?.close();
+
 const output = {
   generatedAt: new Date().toISOString(),
   sources: results.map(({ source, faculty }) => ({
@@ -90,7 +138,7 @@ const output = {
     url: source.url,
     profiles: faculty.length,
   })),
-  faculty: [...combined.values()].sort((a, b) => a.name.localeCompare(b.name)),
+  faculty: [...final.values()].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
 await writeFile(outputPath, `${JSON.stringify(output, null, 2)}\n`, "utf8");

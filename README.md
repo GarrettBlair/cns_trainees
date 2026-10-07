@@ -14,3 +14,12 @@ npm run update:faculty
 
 The refresh script writes the local JSON roster; site visitors do not scrape the
 faculty websites directly.
+
+After scraping, the script compares the result with the existing roster and asks
+for confirmation:
+
+- **New faculty** are listed and added unless you answer `n` (default `Y`).
+- **Faculty no longer listed** are kept unless you answer `y` (default `N`).
+
+Pressing Enter takes the default. In a non-interactive run (such as CI), new
+faculty are added and missing faculty are kept.
