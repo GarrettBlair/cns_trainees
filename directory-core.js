@@ -93,6 +93,8 @@ export function latestPeople(rows) {
     if (existing?.timestamp && (!timestamp || timestamp < existing.timestamp)) continue;
     people.set(key, {
       name,
+      first: first.trim(),
+      last: last.trim(),
       timestamp,
       email: row["Your Email Address"] || "",
       lab: row["Your Lab/PI"] || "",
@@ -117,7 +119,7 @@ export function groupByRole(people) {
 export function siteLinks(website) {
   return website.split(/\s*;\s*/).filter(Boolean).map((site) => {
     const href = /^https?:\/\//i.test(site) ? site : `https://${site}`;
-    let text = site;
+    let text = "Personal Site";
     try {
       const hostname = new URL(href).hostname.toLowerCase();
       const brand = SITE_LABELS.find(([pattern]) => pattern.test(hostname));

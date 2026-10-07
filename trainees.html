@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -121,12 +121,13 @@
       font: inherit;
     }
 
-    .archive-toggle {
+    .archive-toggle,
+    .compact-toggle {
       display: flex !important;
       align-items: center;
       gap: 8px;
       align-self: end;
-      min-height: 46px;
+      min-height: 23px;
       margin: 0;
       color: var(--ink) !important;
       font-size: 0.85rem !important;
@@ -135,7 +136,8 @@
       text-transform: none !important;
     }
 
-    .archive-toggle input {
+    .archive-toggle input,
+    .compact-toggle input {
       width: 16px;
       min-height: 16px;
       margin: 0;
@@ -202,6 +204,7 @@
     }
 
     .person-info { grid-column: 2; grid-row: 1; align-self: center; min-width: 0; }
+    .person.no-photo .person-info { grid-column: 1; }
 
     .person h3 {
       margin: 0 0 3px;
@@ -213,22 +216,7 @@
     }
 
     .person-role { margin: 0 0 12px; color: var(--muted); font-weight: 700; }
-
-    .archived-badge {
-      display: inline-block;
-      margin-bottom: 6px;
-      padding: 2px 6px;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .person-detail {
-      margin: 0;
-      font-size: 0.93rem;
-    }
+    .person-detail { margin: 0; font-size: 0.93rem; }
 
     .detail-line {
       display: grid;
@@ -236,8 +224,89 @@
       align-items: baseline;
     }
 
-    .person-detail a { min-width: 0; overflow-wrap: anywhere; color: var(--green); text-underline-offset: 3px; }
     .detail-label { color: var(--muted); }
+
+    .people-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 0.9rem;
+      animation: arrive 320ms ease both;
+    }
+
+    .people-table th,
+    .people-table td {
+      padding: 7px 12px 7px 0;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    .people-table th {
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .name-cell { color: var(--green); font-weight: 700; }
+
+    .sort-menu { position: relative; display: inline-block; margin-left: 4px; }
+    .sort-menu summary { list-style: none; cursor: pointer; }
+    .sort-menu summary::-webkit-details-marker { display: none; }
+    .sort-options {
+      position: absolute;
+      z-index: 2;
+      top: 100%;
+      left: 0;
+      display: grid;
+      min-width: 7.5rem;
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+    .sort-options button {
+      padding: 6px 10px;
+      border: 0;
+      background: none;
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.8rem;
+      letter-spacing: 0;
+      text-align: left;
+      text-transform: none;
+      cursor: pointer;
+    }
+    .sort-options button[aria-pressed="true"] { color: var(--green); font-weight: 700; }
+
+    .photo-col { width: 76px; text-align: center !important; }
+    .photo-col img {
+      display: block;
+      margin-inline: auto;
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      background: var(--green-soft);
+    }
+
+    @media (max-width: 900px) {
+      .photo-col { display: none; }
+    }
+
+    .archived-badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 5px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .people-table td:not(.name-cell) { color: var(--muted); }
+    .people-table td:not(.name-cell) a,
+    .person-detail a { color: var(--ink); text-underline-offset: 3px; overflow-wrap: anywhere; }
 
     .empty-state,
     .load-error {
@@ -270,8 +339,9 @@
       .intro { grid-template-columns: 1fr; gap: 12px; }
       h1 { font-size: 2.35rem; }
       .controls { grid-template-columns: 1fr; gap: 14px; }
-      .person { grid-template-columns: 120px minmax(0, 1fr); gap: 16px; padding-inline: 0; }
-      .person h3 { font-size: 1rem; }
+      .role-section { overflow-x: auto; }
+      .people-table { min-width: 620px; }
+      .person { grid-template-columns: 120px minmax(0, 1fr); gap: 16px; }
       .directory-meta { align-items: baseline; }
     }
 
@@ -282,7 +352,7 @@
 </head>
 <body>
   <header class="masthead">
-    <div class="masthead-inner">Center for Neural Science · People</div>
+    <div class="masthead-inner">Center for Neural Science Â· People</div>
   </header>
   <main>
     <section class="intro" aria-labelledby="page-title">
@@ -307,11 +377,15 @@
           <input id="show-archived" type="checkbox">
           See archived profiles
         </label>
+        <label class="compact-toggle" for="compact-view">
+          <input id="compact-view" type="checkbox" checked>
+          Compact view
+        </label>
       </div>
     </section>
 
     <div class="directory-meta" aria-live="polite">
-      <span id="result-count">Loading directory…</span>
+      <span id="result-count">Loading directory...</span>
       <span id="archive-summary">Listed by role</span>
     </div>
     <div id="directory" aria-live="polite"></div>
@@ -332,13 +406,86 @@
     const resultCount = document.querySelector("#result-count");
     const showArchivedInput = document.querySelector("#show-archived");
     const archiveSummary = document.querySelector("#archive-summary");
+    const compactInput = document.querySelector("#compact-view");
     let linkLab = (lab) => [{ text: lab }];
+    let allPeople = [];
+    const sortModes = new Map();
+    const defaultSort = { key: "first", dir: 1 };
+
+    function sortPeople(people, { key, dir }) {
+      const labText = (person) => labContent(person).textContent;
+      const fields = key === "last" ? ["last", "first"] : ["first", "last"];
+      return [...people].sort((a, b) => {
+        if (key === "lab") {
+          const labA = labText(a);
+          const labB = labText(b);
+          // People without a lab stay at the bottom in either direction.
+          if (!labA !== !labB) return labA ? -1 : 1;
+          const result = labA.localeCompare(labB);
+          if (result) return result * dir;
+        } else {
+          const result = a[fields[0]].localeCompare(b[fields[0]]) || a[fields[1]].localeCompare(b[fields[1]]);
+          if (result) return result * dir;
+        }
+        return a.name.localeCompare(b.name);
+      });
+    }
 
     function makeText(tag, className, text) {
       const element = document.createElement(tag);
       if (className) element.className = className;
       element.textContent = text;
       return element;
+    }
+
+    function labContent(person) {
+      const content = document.createDocumentFragment();
+      if (!person.lab) return content;
+      const segments = linkLab(person.lab);
+      const faculty = segments.filter((segment) => segment.url);
+      // Unmatched labs fall back to the submitted text.
+      const shown = faculty.length ? faculty : segments;
+      const seen = new Set();
+      for (const segment of shown) {
+        const text = faculty.length ? `${segment.text.trim().split(/\s+/).at(-1)} lab` : segment.text;
+        if (faculty.length && seen.has(text)) continue;
+        seen.add(text);
+        if (content.hasChildNodes()) content.append(document.createTextNode(", "));
+        if (!segment.url) {
+          content.append(document.createTextNode(text));
+          continue;
+        }
+        const link = document.createElement("a");
+        link.href = segment.url;
+        link.textContent = text;
+        content.append(link);
+      }
+      return content;
+    }
+
+    function emailContent(person) {
+      const content = document.createDocumentFragment();
+      if (!person.email.includes("@")) return content;
+      const link = document.createElement("a");
+      link.href = `mailto:${person.email}`;
+      link.textContent = person.email;
+      content.append(link);
+      return content;
+    }
+
+    function siteContent(person) {
+      const content = document.createDocumentFragment();
+      if (!person.website) return content;
+      siteLinks(person.website).forEach((site, index) => {
+        if (index > 0) content.append(document.createTextNode("; "));
+        const link = document.createElement("a");
+        link.href = site.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = site.text;
+        content.append(link);
+      });
+      return content;
     }
 
     function render(people) {
@@ -372,75 +519,108 @@
         const heading = makeText("h2", "role-heading", groupName);
         heading.append(makeText("span", "role-count", String(groupPeople.length)));
         section.append(heading);
+        section.append(compactInput.checked ? buildTable(groupName, groupPeople, cutoff) : buildCards(groupPeople, cutoff));
+        directory.append(section);
+      }
+    }
 
-        for (const person of groupPeople) {
-          const article = document.createElement("article");
+    function buildCards(groupPeople, cutoff) {
+      const list = document.createElement("div");
+      for (const person of groupPeople) {
+        const article = document.createElement("article");
+        const archived = isArchived(person, cutoff);
+        article.className = archived ? "person is-archived" : "person";
+        const image = document.createElement("img");
+        image.src = imagePath;
+        image.alt = `Placeholder portrait for ${person.name}`;
+        image.addEventListener("error", () => {
+          image.remove();
+          article.classList.add("no-photo");
+        }, { once: true });
+        article.append(image);
+
+        const details = document.createElement("div");
+        details.className = "person-info";
+        details.append(makeText("h3", "", person.name));
+        if (archived) details.append(makeText("span", "archived-badge", "Archived"));
+        if (person.role) details.append(makeText("p", "person-role", person.role));
+        const detailList = document.createElement("p");
+        detailList.className = "person-detail";
+        for (const [label, content] of [["Lab", labContent(person)], ["Email", emailContent(person)], ["Site", siteContent(person)]]) {
+          if (!content.hasChildNodes()) continue;
+          const line = makeText("span", "detail-line", "");
+          line.append(makeText("span", "detail-label", label));
+          const value = document.createElement("span");
+          value.append(content);
+          line.append(value);
+          detailList.append(line);
+        }
+        details.append(detailList);
+        article.append(details);
+        list.append(article);
+      }
+      return list;
+    }
+
+    function buildTable(groupName, groupPeople, cutoff) {
+        const mode = sortModes.get(groupName) || defaultSort;
+        const sortChoices = {
+          Name: [["first", 1, "First name A\u2013Z"], ["first", -1, "First name Z\u2013A"], ["last", 1, "Last name A\u2013Z"], ["last", -1, "Last name Z\u2013A"]],
+          "Lab(s)": [["lab", 1, "A\u2013Z"], ["lab", -1, "Z\u2013A"]],
+        };
+        const table = document.createElement("table");
+        table.className = "people-table";
+        const headRow = table.createTHead().insertRow();
+        for (const label of ["Photo", "Name", "Lab(s)", "Email", "Website"]) {
+          const th = makeText("th", label === "Photo" ? "photo-col" : "", label === "Photo" ? "" : label);
+          if (label === "Photo") th.setAttribute("aria-label", "Photo");
+          th.scope = "col";
+          if (sortChoices[label]) {
+            const menu = document.createElement("details");
+            menu.className = "sort-menu";
+            const summary = makeText("summary", "", "\u25BE");
+            summary.setAttribute("aria-label", `Sort ${label}`);
+            const options = document.createElement("div");
+            options.className = "sort-options";
+            for (const [key, dir, text] of sortChoices[label]) {
+              const button = makeText("button", "", text);
+              button.type = "button";
+              button.setAttribute("aria-pressed", String(mode.key === key && mode.dir === dir));
+              button.addEventListener("click", () => {
+                sortModes.set(groupName, { key, dir });
+                render(allPeople);
+              });
+              options.append(button);
+            }
+            menu.append(summary, options);
+            th.append(menu);
+          }
+          headRow.append(th);
+        }
+        const body = table.createTBody();
+
+        for (const person of sortPeople(groupPeople, mode)) {
           const archived = isArchived(person, cutoff);
-          article.className = archived ? "person is-archived" : "person";
+          const row = body.insertRow();
+          if (archived) row.className = "is-archived";
+          const photoCell = row.insertCell();
+          photoCell.className = "photo-col";
           const image = document.createElement("img");
           image.src = imagePath;
           image.alt = `Placeholder portrait for ${person.name}`;
-          image.addEventListener("error", () => {
-            image.remove();
-            article.classList.add("no-photo");
-          }, { once: true });
-          article.append(image);
+          image.addEventListener("error", () => image.remove(), { once: true });
+          photoCell.append(image);
+          const nameCell = row.insertCell();
+          nameCell.className = "name-cell";
+          nameCell.append(person.name);
+          if (archived) nameCell.append(makeText("span", "archived-badge", "Archived"));
 
-          const details = document.createElement("div");
-          details.className = "person-info";
-          details.append(makeText("h3", "", person.name));
-          if (archived) details.append(makeText("span", "archived-badge", "Archived"));
-          if (person.role) details.append(makeText("p", "person-role", person.role));
-          const detailList = document.createElement("p");
-          detailList.className = "person-detail";
-          if (person.lab) {
-            const labLine = makeText("span", "detail-line", "");
-            labLine.append(makeText("span", "detail-label", "Lab"));
-            const labValue = document.createElement("span");
-            for (const segment of linkLab(person.lab)) {
-              if (!segment.url) {
-                labValue.append(document.createTextNode(segment.text));
-                continue;
-              }
-              const link = document.createElement("a");
-              link.href = segment.url;
-              link.textContent = segment.text;
-              labValue.append(link);
-            }
-            labLine.append(labValue);
-            detailList.append(labLine);
-          }
-          if (person.email) {
-            const emailLine = makeText("span", "detail-line", "");
-            emailLine.append(makeText("span", "detail-label", "Email"));
-            const emailLink = document.createElement("a");
-            emailLink.href = `mailto:${person.email}`;
-            emailLink.textContent = person.email;
-            emailLine.append(emailLink);
-            detailList.append(emailLine);
-          }
-          if (person.website) {
-            const siteLine = makeText("span", "detail-line", "");
-            siteLine.append(makeText("span", "detail-label", "Site"));
-            const siteValue = document.createElement("span");
-            siteLinks(person.website).forEach((site, index) => {
-              if (index > 0) siteValue.append(document.createTextNode("; "));
-              const siteLink = document.createElement("a");
-              siteLink.href = site.href;
-              siteLink.target = "_blank";
-              siteLink.rel = "noopener noreferrer";
-              siteLink.textContent = site.text;
-              siteValue.append(siteLink);
-            });
-            siteLine.append(siteValue);
-            detailList.append(siteLine);
-          }
-          details.append(detailList);
-          article.append(details);
-          section.append(article);
+          const labValue = row.insertCell();
+          labValue.append(labContent(person));
+          row.insertCell().append(emailContent(person));
+          row.insertCell().append(siteContent(person));
         }
-        directory.append(section);
-      }
+        return table;
     }
 
     async function loadDirectory() {
@@ -457,6 +637,7 @@
         const response = await fetch(PUBLISHED_CSV_URL);
         if (!response.ok) throw new Error(`CSV request returned ${response.status}`);
         const people = latestPeople(parseCsv(await response.text()));
+        allPeople = people;
         const roles = [...new Set(people.map((person) => person.role).filter(Boolean))].sort((a, b) => a.localeCompare(b));
         for (const role of roles) {
           const option = document.createElement("option");
@@ -468,6 +649,7 @@
         searchInput.addEventListener("input", () => render(people));
         roleFilter.addEventListener("change", () => render(people));
         showArchivedInput.addEventListener("change", () => render(people));
+        compactInput.addEventListener("change", () => render(people));
       } catch (error) {
         resultCount.textContent = "";
         const message = document.createElement("p");
