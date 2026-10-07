@@ -117,7 +117,7 @@ export function groupByRole(people) {
 export function siteLinks(website) {
   return website.split(/\s*;\s*/).filter(Boolean).map((site) => {
     const href = /^https?:\/\//i.test(site) ? site : `https://${site}`;
-    let text = site;
+    let text = "personal website";
     try {
       const hostname = new URL(href).hostname.toLowerCase();
       const brand = SITE_LABELS.find(([pattern]) => pattern.test(hostname));

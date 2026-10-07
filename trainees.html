@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -180,44 +180,50 @@
       font-size: 0.8rem;
     }
 
-    .person {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 200px;
-      gap: 24px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--line);
+    .people-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 0.9rem;
       animation: arrive 320ms ease both;
     }
 
-    .person.no-photo { grid-template-columns: minmax(0, 1fr); }
+    .people-table th,
+    .people-table td {
+      padding: 7px 12px 7px 0;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
 
-    .person img {
+    .people-table th {
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .name-cell { color: var(--green); font-weight: 700; }
+
+    .photo-col { width: 76px; text-align: center !important; }
+    .photo-col img {
       display: block;
-      grid-column: 2;
-      grid-row: 1;
-      width: 100%;
-      aspect-ratio: 1;
+      margin-inline: auto;
+      width: 56px;
+      height: 56px;
       object-fit: cover;
       background: var(--green-soft);
     }
 
-    .person-info { grid-column: 1; grid-row: 1; align-self: center; min-width: 0; }
-
-    .person h3 {
-      margin: 0 0 3px;
-      color: var(--green);
-      font-family: var(--sans);
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1.25;
+    @media (max-width: 900px) {
+      .photo-col { display: none; }
     }
-
-    .person-role { margin: 0 0 12px; color: var(--muted); font-weight: 700; }
 
     .archived-badge {
       display: inline-block;
-      margin-bottom: 6px;
-      padding: 2px 6px;
+      margin-left: 6px;
+      padding: 1px 5px;
       border: 1px solid var(--line);
       color: var(--muted);
       font-size: 0.68rem;
@@ -225,19 +231,8 @@
       text-transform: uppercase;
     }
 
-    .person-detail {
-      margin: 0;
-      font-size: 0.93rem;
-    }
-
-    .detail-line {
-      display: grid;
-      grid-template-columns: 3.5rem minmax(0, 1fr);
-      align-items: baseline;
-    }
-
-    .person-detail a { min-width: 0; overflow-wrap: anywhere; color: var(--green); text-underline-offset: 3px; }
-    .detail-label { color: var(--muted); }
+    .people-table td:not(.name-cell) { color: var(--muted); }
+    .people-table td:not(.name-cell) a { color: var(--ink); text-underline-offset: 3px; }
 
     .empty-state,
     .load-error {
@@ -270,8 +265,8 @@
       .intro { grid-template-columns: 1fr; gap: 12px; }
       h1 { font-size: 2.35rem; }
       .controls { grid-template-columns: 1fr; gap: 14px; }
-      .person { grid-template-columns: minmax(0, 1fr) 120px; gap: 16px; padding-inline: 0; }
-      .person h3 { font-size: 1rem; }
+      .role-section { overflow-x: auto; }
+      .people-table { min-width: 620px; }
       .directory-meta { align-items: baseline; }
     }
 
@@ -282,7 +277,7 @@
 </head>
 <body>
   <header class="masthead">
-    <div class="masthead-inner">Center for Neural Science · People</div>
+    <div class="masthead-inner">Center for Neural Science Â· People</div>
   </header>
   <main>
     <section class="intro" aria-labelledby="page-title">
@@ -311,7 +306,7 @@
     </section>
 
     <div class="directory-meta" aria-live="polite">
-      <span id="result-count">Loading directory…</span>
+      <span id="result-count">Loading directoryâ€¦</span>
       <span id="archive-summary">Listed by role</span>
     </div>
     <div id="directory" aria-live="polite"></div>
@@ -373,56 +368,66 @@
         heading.append(makeText("span", "role-count", String(groupPeople.length)));
         section.append(heading);
 
+        const table = document.createElement("table");
+        table.className = "people-table";
+        const headRow = table.createTHead().insertRow();
+        for (const label of ["Photo", "Name", "Lab(s)", "Email", "Website"]) {
+          const th = makeText("th", label === "Photo" ? "photo-col" : "", label === "Photo" ? "" : label);
+          if (label === "Photo") th.setAttribute("aria-label", "Photo");
+          th.scope = "col";
+          headRow.append(th);
+        }
+        const body = table.createTBody();
+
         for (const person of groupPeople) {
-          const article = document.createElement("article");
           const archived = isArchived(person, cutoff);
-          article.className = archived ? "person is-archived" : "person";
+          const row = body.insertRow();
+          if (archived) row.className = "is-archived";
+          const photoCell = row.insertCell();
+          photoCell.className = "photo-col";
           const image = document.createElement("img");
           image.src = imagePath;
           image.alt = `Placeholder portrait for ${person.name}`;
-          image.addEventListener("error", () => {
-            image.remove();
-            article.classList.add("no-photo");
-          }, { once: true });
-          article.append(image);
+          image.addEventListener("error", () => image.remove(), { once: true });
+          photoCell.append(image);
+          const nameCell = row.insertCell();
+          nameCell.className = "name-cell";
+          nameCell.append(person.name);
+          if (archived) nameCell.append(makeText("span", "archived-badge", "Archived"));
 
-          const details = document.createElement("div");
-          details.className = "person-info";
-          details.append(makeText("h3", "", person.name));
-          if (archived) details.append(makeText("span", "archived-badge", "Archived"));
-          if (person.role) details.append(makeText("p", "person-role", person.role));
-          const detailList = document.createElement("p");
-          detailList.className = "person-detail";
+          const labValue = row.insertCell();
           if (person.lab) {
-            const labLine = makeText("span", "detail-line", "");
-            labLine.append(makeText("span", "detail-label", "Lab"));
-            const labValue = document.createElement("span");
-            for (const segment of linkLab(person.lab)) {
+            const segments = linkLab(person.lab);
+            const faculty = segments.filter((segment) => segment.url);
+            // Unmatched labs fall back to the submitted text.
+            const shown = faculty.length ? faculty : segments;
+            const seen = new Set();
+            for (const segment of shown) {
+              const text = faculty.length ? `${segment.text.trim().split(/\s+/).at(-1)} lab` : segment.text;
+              if (faculty.length && seen.has(text)) continue;
+              seen.add(text);
+              if (labValue.childNodes.length) labValue.append(document.createTextNode(", "));
               if (!segment.url) {
-                labValue.append(document.createTextNode(segment.text));
+                labValue.append(document.createTextNode(text));
                 continue;
               }
               const link = document.createElement("a");
               link.href = segment.url;
-              link.textContent = segment.text;
+              link.textContent = text;
               labValue.append(link);
             }
-            labLine.append(labValue);
-            detailList.append(labLine);
           }
-          if (person.email) {
-            const emailLine = makeText("span", "detail-line", "");
-            emailLine.append(makeText("span", "detail-label", "Email"));
+
+          const emailValue = row.insertCell();
+          if (/@nyu\.edu$/i.test(person.email)) {
             const emailLink = document.createElement("a");
             emailLink.href = `mailto:${person.email}`;
             emailLink.textContent = person.email;
-            emailLine.append(emailLink);
-            detailList.append(emailLine);
+            emailValue.append(emailLink);
           }
+
+          const siteValue = row.insertCell();
           if (person.website) {
-            const siteLine = makeText("span", "detail-line", "");
-            siteLine.append(makeText("span", "detail-label", "Site"));
-            const siteValue = document.createElement("span");
             siteLinks(person.website).forEach((site, index) => {
               if (index > 0) siteValue.append(document.createTextNode("; "));
               const siteLink = document.createElement("a");
@@ -432,13 +437,9 @@
               siteLink.textContent = site.text;
               siteValue.append(siteLink);
             });
-            siteLine.append(siteValue);
-            detailList.append(siteLine);
           }
-          details.append(detailList);
-          article.append(details);
-          section.append(article);
         }
+        section.append(table);
         directory.append(section);
       }
     }
