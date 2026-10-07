@@ -16,7 +16,7 @@ Prerequisites: a browser, plus either Python 3 or Node.js. No build step is need
 
 1. __Get the repo.__ Clone it or download the ZIP from GitHub, then open a terminal in the project folder.
 
-2. __Serve it over HTTP.__ Opening trainees.html directly won't work, because the page uses fetch to load the faculty roster. Run one of these:
+2. __Serve it over HTTP.__ Opening trainees.html directly won't work, because the page uses fetch and an ES module import (`directory-core.js`). Run one of these:
   ```python -m http.server 8000```
 or
   ```npx serve .```
@@ -29,7 +29,7 @@ or
   - Search and filter: search by name, lab or email, and use the role dropdown.
   - Lab links: lab names such as "Fenton" or "Michael Long / György Buzsáki" link to the CNS or NYU Langone faculty profiles.
   - Site links: these are shortened to LinkedIn, GitHub, Google Scholar or Linktree, and multiple links share one line.
-  - Archiving: profiles whose latest submission is over 12 months old are hidden. "See archived profiles" switches to the archived-only view, and the cutoff is archiveAgeMonths in trainees.html.
+  - Archiving: profiles whose latest submission is over 12 months old are hidden. "See archived profiles" switches to the archived-only view, and the cutoff is `ARCHIVE_AGE_MONTHS` in `directory-core.js`.
   - Photos: profiles use the placeholder no_image.png, and a profile with no loadable image simply omits it.
   - Responsive layout: narrow the browser window to see the mobile layout.
 
@@ -57,3 +57,19 @@ After scraping, the script compares the result with the existing roster and asks
 - **Faculty no longer listed** are kept unless you answer `y` (default `N`).
 
 Pressing Enter takes the default. In a non-interactive run (such as CI), new faculty are added and missing faculty are kept.
+
+## Embed in Google Sites / Weebly (static HTML)
+
+Google Sites and the Weebly-based CNS site cannot run the page's JavaScript, so generate a static, paste-ready snippet offline:
+
+```sh
+npm install
+npm run build:embed
+```
+
+This reads the published sheet and `sources/faculty-directory.json`, applies the same 12-month archive rule and faculty links as the live page, and writes `dist/trainees-embed.html`. The snippet has no scripts, `<style>` blocks or classes (everything is inline-styled), and it replaces search, filter and the archive toggle with a role link bar at the top. Paste its contents into an HTML/embed block.
+
+- **Photos must be reachable by URL.** Pasted HTML has no base path, so images use an absolute URL. The default is `https://garrettjblair.com/cns_trainees/sources/no_image.png`; override it with `npm run build:embed -- --image-url=https://example.org/no_image.png`.
+- **It is a snapshot.** Regenerate and re-paste whenever the sheet or faculty roster changes.
+- Other options: `--out=<file>` and `--csv=<url or local file>` (for example a downloaded copy if the sheet is unavailable).
+- The page and the generator share their data logic in `directory-core.js`, so the two stay consistent.

@@ -318,8 +318,12 @@
   </main>
   <footer>Center for Neural Science</footer>
 
-  <script>
-    const csvPath = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRI-bsWtUw-xHXXn8wznvhXg3htUK4281nrDdDYrPe5OMFqlmdfYaA8GPQ-gic2QFSq7jyiNGi9bnl3/pub?gid=1236118581&single=true&output=csv";
+  <script type="module">
+    import {
+      ARCHIVE_AGE_MONTHS, PUBLISHED_CSV_URL, archiveCutoff, createFacultyLinker, groupByRole,
+      isArchived, latestPeople, parseCsv, siteLinks,
+    } from "./directory-core.js";
+
     const facultyRosterPath = "sources/faculty-directory.json";
     const imagePath = "sources/no_image.png";
     const directory = document.querySelector("#directory");
@@ -328,207 +332,7 @@
     const resultCount = document.querySelector("#result-count");
     const showArchivedInput = document.querySelector("#show-archived");
     const archiveSummary = document.querySelector("#archive-summary");
-    const archiveAgeMonths = 12;
-    let facultyAliasLookup = new Map();
-    let facultyAliasPattern = null;
-    const facultyAliasOverrides = [
-      { alias: "Tony Movshon", name: "J. Anthony Movshon" },
-    ];
-
-    function normalizeFacultyName(name) {
-      return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
-    }
-
-    function normalizeWithOffsets(value) {
-      const characters = [];
-      const sourceStarts = [];
-      const sourceEnds = [];
-      for (let offset = 0; offset < value.length;) {
-        const sourceCharacter = String.fromCodePoint(value.codePointAt(offset));
-        const nextOffset = offset + sourceCharacter.length;
-        const normalizedCharacters = sourceCharacter.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase();
-        for (const character of normalizedCharacters) {
-          const normalizedCharacter = /[\p{L}\p{N}]/u.test(character) ? character : " ";
-          if (normalizedCharacter === " " && (!characters.length || characters.at(-1) === " ")) {
-            if (characters.length) sourceEnds[sourceEnds.length - 1] = nextOffset;
-            continue;
-          }
-          characters.push(normalizedCharacter);
-          sourceStarts.push(offset);
-          sourceEnds.push(nextOffset);
-        }
-        offset = nextOffset;
-      }
-      while (characters.at(-1) === " ") {
-        characters.pop();
-        sourceStarts.pop();
-        sourceEnds.pop();
-      }
-      return { text: characters.join(""), sourceStarts, sourceEnds };
-    }
-
-    function buildFacultyMatcher(facultyDirectory) {
-      const facultyByName = new Map();
-      for (const person of facultyDirectory) {
-        const key = normalizeFacultyName(person.name);
-        if (key && !facultyByName.has(key)) facultyByName.set(key, person);
-      }
-
-      const surnameCounts = new Map();
-      for (const person of facultyByName.values()) {
-        const surname = normalizeFacultyName(person.name).split(" ").at(-1);
-        surnameCounts.set(surname, (surnameCounts.get(surname) || 0) + 1);
-      }
-
-      const aliases = new Map();
-      const ambiguousAliases = new Set();
-      const addAlias = (alias, person) => {
-        const key = normalizeFacultyName(alias);
-        if (!key || ambiguousAliases.has(key)) return;
-        const existing = aliases.get(key);
-        if (!existing) aliases.set(key, person);
-        else if (existing.url !== person.url) {
-          aliases.delete(key);
-          ambiguousAliases.add(key);
-        }
-      };
-
-      for (const person of facultyByName.values()) {
-        const nameParts = person.name.split(/\s+/);
-        const first = nameParts[0];
-        const surname = nameParts.at(-1);
-        const variants = new Set([
-          person.name,
-          `${first} ${surname}`,
-          person.name.normalize("NFD").replace(/[\u0300-\u036f]/g, ""),
-          `${first.normalize("NFD").replace(/[\u0300-\u036f]/g, "")} ${surname.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`,
-        ]);
-        for (const alias of variants) addAlias(alias, person);
-        if (surnameCounts.get(normalizeFacultyName(surname)) === 1) addAlias(surname, person);
-      }
-
-      for (const override of facultyAliasOverrides) {
-        const person = [...facultyByName.values()].find((entry) => normalizeFacultyName(entry.name) === normalizeFacultyName(override.name));
-        if (person) addAlias(override.alias, person);
-      }
-
-      facultyAliasLookup = aliases;
-      const patterns = [...facultyAliasLookup.keys()]
-        .sort((a, b) => b.length - a.length)
-        .map((alias) => alias.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-      facultyAliasPattern = patterns.length
-        ? new RegExp(`(^| )(${patterns.join("|")})(?=$| )`, "giu")
-        : null;
-    }
-
-    function appendLabLinks(container, lab) {
-      if (!facultyAliasPattern) {
-        container.textContent = lab;
-        return;
-      }
-      const normalizedLab = normalizeWithOffsets(lab);
-      let cursor = 0;
-      for (const match of normalizedLab.text.matchAll(facultyAliasPattern)) {
-        const normalizedStart = match.index + match[1].length;
-        const normalizedEnd = normalizedStart + match[2].length;
-        const start = normalizedLab.sourceStarts[normalizedStart];
-        const end = normalizedLab.sourceEnds[normalizedEnd - 1];
-        container.append(document.createTextNode(lab.slice(cursor, start)));
-        const faculty = facultyAliasLookup.get(match[2]);
-        const link = document.createElement("a");
-        if (faculty && start >= cursor && end > start) {
-          link.href = faculty.url;
-          link.textContent = lab.slice(start, end);
-          container.append(link);
-          cursor = end;
-        }
-      }
-      container.append(document.createTextNode(lab.slice(cursor)));
-    }
-
-    function parseCsv(text) {
-      const rows = [];
-      let row = [];
-      let value = "";
-      let quoted = false;
-
-      for (let index = 0; index < text.length; index += 1) {
-        const character = text[index];
-        if (quoted) {
-          if (character === '"' && text[index + 1] === '"') {
-            value += '"';
-            index += 1;
-          } else if (character === '"') {
-            quoted = false;
-          } else {
-            value += character;
-          }
-        } else if (character === '"') {
-          quoted = true;
-        } else if (character === ",") {
-          row.push(value);
-          value = "";
-        } else if (character === "\n" || character === "\r") {
-          if (character === "\r" && text[index + 1] === "\n") index += 1;
-          row.push(value);
-          if (row.some((cell) => cell.trim())) rows.push(row);
-          row = [];
-          value = "";
-        } else {
-          value += character;
-        }
-      }
-      row.push(value);
-      if (row.some((cell) => cell.trim())) rows.push(row);
-
-      const headers = rows.shift().map((header) => header.trim().replace(/^\uFEFF/, ""));
-      return rows.map((cells) => Object.fromEntries(headers.map((header, index) => [header, (cells[index] || "").trim()])));
-    }
-
-    function parseTimestamp(value) {
-      const match = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/.exec(value.trim());
-      if (!match) {
-        const parsed = new Date(value);
-        return Number.isNaN(parsed.getTime()) ? null : parsed;
-      }
-      const [, month, day, year, hour = "0", minute = "0", second = "0"] = match;
-      const timestamp = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute), Number(second));
-      if (timestamp.getFullYear() !== Number(year) || timestamp.getMonth() !== Number(month) - 1 || timestamp.getDate() !== Number(day)) return null;
-      return timestamp;
-    }
-
-    function archiveCutoff(months, now = new Date()) {
-      const cutoff = new Date(now);
-      const day = cutoff.getDate();
-      cutoff.setDate(1);
-      cutoff.setMonth(cutoff.getMonth() - months);
-      const lastDay = new Date(cutoff.getFullYear(), cutoff.getMonth() + 1, 0).getDate();
-      cutoff.setDate(Math.min(day, lastDay));
-      return cutoff;
-    }
-
-    function latestPeople(rows) {
-      const people = new Map();
-      for (const row of rows) {
-        const first = row["First Name"] || "";
-        const last = row["Last Name"] || "";
-        const name = `${first} ${last}`.trim().replace(/\s+/g, " ");
-        if (!name) continue;
-        const key = name.toLocaleLowerCase();
-        const timestamp = parseTimestamp(row.Timestamp || "");
-        const existing = people.get(key);
-        if (existing?.timestamp && (!timestamp || timestamp < existing.timestamp)) continue;
-        people.set(key, {
-          name,
-          timestamp,
-          email: row["Your Email Address"] || "",
-          lab: row["Your Lab/PI"] || "",
-          role: row["Current Role"] || "",
-          website: row["Personal/Professional Website URL"] || "",
-        });
-      }
-      return [...people.values()].sort((a, b) => a.name.localeCompare(b.name));
-    }
+    let linkLab = (lab) => [{ text: lab }];
 
     function makeText(tag, className, text) {
       const element = document.createElement(tag);
@@ -545,9 +349,9 @@
         const haystack = `${person.name} ${person.email} ${person.lab} ${person.role} ${person.website}`.toLocaleLowerCase();
         return matchesRole && haystack.includes(query);
       });
-      const cutoff = archiveCutoff(archiveAgeMonths);
-      const archivedPeople = matchingPeople.filter((person) => person.timestamp && person.timestamp < cutoff);
-      const currentPeople = matchingPeople.filter((person) => !person.timestamp || person.timestamp >= cutoff);
+      const cutoff = archiveCutoff(ARCHIVE_AGE_MONTHS);
+      const archivedPeople = matchingPeople.filter((person) => isArchived(person, cutoff));
+      const currentPeople = matchingPeople.filter((person) => !isArchived(person, cutoff));
       const visible = showArchivedInput.checked
         ? archivedPeople
         : currentPeople;
@@ -562,14 +366,7 @@
         return;
       }
 
-      const groups = new Map();
-      for (const person of visible) {
-        const groupName = person.role || "Role not listed";
-        if (!groups.has(groupName)) groups.set(groupName, []);
-        groups.get(groupName).push(person);
-      }
-
-      for (const [groupName, groupPeople] of [...groups].sort(([a], [b]) => a.localeCompare(b))) {
+      for (const [groupName, groupPeople] of groupByRole(visible)) {
         const section = document.createElement("section");
         section.className = "role-section";
         const heading = makeText("h2", "role-heading", groupName);
@@ -578,8 +375,8 @@
 
         for (const person of groupPeople) {
           const article = document.createElement("article");
-          const isArchived = person.timestamp && person.timestamp < cutoff;
-          article.className = isArchived ? "person is-archived" : "person";
+          const archived = isArchived(person, cutoff);
+          article.className = archived ? "person is-archived" : "person";
           const image = document.createElement("img");
           image.src = imagePath;
           image.alt = `Placeholder portrait for ${person.name}`;
@@ -592,7 +389,7 @@
           const details = document.createElement("div");
           details.className = "person-info";
           details.append(makeText("h3", "", person.name));
-          if (isArchived) details.append(makeText("span", "archived-badge", "Archived"));
+          if (archived) details.append(makeText("span", "archived-badge", "Archived"));
           if (person.role) details.append(makeText("p", "person-role", person.role));
           const detailList = document.createElement("p");
           detailList.className = "person-detail";
@@ -600,7 +397,16 @@
             const labLine = makeText("span", "detail-line", "");
             labLine.append(makeText("span", "detail-label", "Lab"));
             const labValue = document.createElement("span");
-            appendLabLinks(labValue, person.lab);
+            for (const segment of linkLab(person.lab)) {
+              if (!segment.url) {
+                labValue.append(document.createTextNode(segment.text));
+                continue;
+              }
+              const link = document.createElement("a");
+              link.href = segment.url;
+              link.textContent = segment.text;
+              labValue.append(link);
+            }
             labLine.append(labValue);
             detailList.append(labLine);
           }
@@ -617,23 +423,13 @@
             const siteLine = makeText("span", "detail-line", "");
             siteLine.append(makeText("span", "detail-label", "Site"));
             const siteValue = document.createElement("span");
-            const sites = person.website.split(/\s*;\s*/).filter(Boolean);
-            sites.forEach((site, index) => {
+            siteLinks(person.website).forEach((site, index) => {
               if (index > 0) siteValue.append(document.createTextNode("; "));
               const siteLink = document.createElement("a");
-              const href = /^https?:\/\//i.test(site) ? site : `https://${site}`;
-              siteLink.href = href;
+              siteLink.href = site.href;
               siteLink.target = "_blank";
               siteLink.rel = "noopener noreferrer";
-              let linkText = site;
-              try {
-                const hostname = new URL(href).hostname.toLowerCase();
-                if (/(^|\.)linkedin\.com$/.test(hostname)) linkText = "LinkedIn";
-                if (/(^|\.)github\.(com|io)$/.test(hostname)) linkText = "GitHub";
-                if (/(^|\.)scholar\.google\.com$/.test(hostname)) linkText = "Google Scholar";
-                if (/(^|\.)(linktr\.ee|linktree\.com)$/.test(hostname)) linkText = "Linktree";
-              } catch {}
-              siteLink.textContent = linkText;
+              siteLink.textContent = site.text;
               siteValue.append(siteLink);
             });
             siteLine.append(siteValue);
@@ -652,13 +448,13 @@
         const facultyResponse = await fetch(facultyRosterPath);
         if (!facultyResponse.ok) throw new Error(`Faculty roster request returned ${facultyResponse.status}`);
         const facultyRoster = await facultyResponse.json();
-        buildFacultyMatcher(Array.isArray(facultyRoster.faculty) ? facultyRoster.faculty : []);
+        linkLab = createFacultyLinker(Array.isArray(facultyRoster.faculty) ? facultyRoster.faculty : []);
       } catch (error) {
         console.warn("Unable to load faculty profile links", error);
       }
 
       try {
-        const response = await fetch(csvPath);
+        const response = await fetch(PUBLISHED_CSV_URL);
         if (!response.ok) throw new Error(`CSV request returned ${response.status}`);
         const people = latestPeople(parseCsv(await response.text()));
         const roles = [...new Set(people.map((person) => person.role).filter(Boolean))].sort((a, b) => a.localeCompare(b));

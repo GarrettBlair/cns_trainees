@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "update:faculty": "node scripts/update-faculty-directory.mjs"
+    "update:faculty": "node scripts/update-faculty-directory.mjs",
+    "build:embed": "node scripts/generate-static-directory.mjs"
   },
   "dependencies": {
     "cheerio": "^1.2.0"
