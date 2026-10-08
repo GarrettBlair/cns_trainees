@@ -98,6 +98,7 @@ export function latestPeople(rows) {
       timestamp,
       email: row["Your Email Address"] || "",
       lab: row["Your Lab/PI"] || "",
+      previousAffiliation: row["Past Institutional Affiliation (undergrad institution for students, grad institution for postdocs)"] || "",
       role: row["Current Role"] || "",
       website: row["Personal/Professional Website URL"] || "",
     });

@@ -56,7 +56,7 @@ async function loadFaculty() {
 }
 
 const detailLine = (label, valueHtml) =>
-  `<div style="display:flex;gap:0.5em;"><span style="flex:0 0 3.5em;color:${MUTED};">${label}</span><span style="min-width:0;overflow-wrap:anywhere;">${valueHtml}</span></div>`;
+  `<div style="display:flex;gap:0.75em;"><span style="flex:0 0 8em;color:${MUTED};text-align:right;">${label}</span><span style="min-width:0;overflow-wrap:anywhere;">${valueHtml}</span></div>`;
 
 function renderPerson(person, linkLab) {
   const lines = [];
@@ -64,6 +64,7 @@ function renderPerson(person, linkLab) {
     lines.push(detailLine("Lab", linkLab(person.lab).map((segment) => (segment.url ? link(segment.url, segment.text) : escapeHtml(segment.text))).join("")));
   }
   if (person.email) lines.push(detailLine("Email", link(`mailto:${person.email}`, person.email)));
+  if (person.previousAffiliation) lines.push(detailLine("Prior affiliation", escapeHtml(person.previousAffiliation)));
   if (person.website) {
     lines.push(detailLine("Site", siteLinks(person.website).map((site) => link(site.href, site.text, true)).join("; ")));
   }

@@ -16,6 +16,11 @@ const sources = [
     name: "NYU Langone Neuroscience Faculty",
     url: "https://med.nyu.edu/departments-institutes/neuroscience/faculty",
     accepts: (profileUrl) => /^(https:\/\/med\.nyu\.edu\/faculty\/|https:\/\/med\.nyu\.edu\/research\/kang-lab\/|https:\/\/nyulangone\.org\/doctors\/)/i.test(profileUrl),
+  },  
+  {
+    name: "NYU Shanghai Neuroscience Faculty",
+    url: "https://shanghai.nyu.edu/academics/faculty-directory?discipline=288",
+    accepts: (profileUrl) => /shanghai\.nyu\.edu\/academics\/faculty-directory/i.test(profileUrl),
   },
 ];
 

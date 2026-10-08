@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Meet the students, postdoctoral fellows, and research staff working across the NYU Center for Neural Science.">
   <meta name="theme-color" content="#f5f4ef">
   <title>Trainee Directory | Center for Neural Science</title>
   <style>
@@ -220,11 +222,12 @@
 
     .detail-line {
       display: grid;
-      grid-template-columns: 3.5rem minmax(0, 1fr);
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+      column-gap: 0.75rem;
       align-items: baseline;
     }
 
-    .detail-label { color: var(--muted); }
+    .detail-label { color: var(--muted); text-align: right; }
 
     .people-table {
       width: 100%;
@@ -352,7 +355,7 @@
 </head>
 <body>
   <header class="masthead">
-    <div class="masthead-inner">Center for Neural Science Â· People</div>
+    <div class="masthead-inner">NYU  |  Center for Neural Science  |  People</div>
   </header>
   <main>
     <section class="intro" aria-labelledby="page-title">
@@ -546,7 +549,9 @@
         if (person.role) details.append(makeText("p", "person-role", person.role));
         const detailList = document.createElement("p");
         detailList.className = "person-detail";
-        for (const [label, content] of [["Lab", labContent(person)], ["Email", emailContent(person)], ["Site", siteContent(person)]]) {
+        const affiliationContent = document.createDocumentFragment();
+        if (person.previousAffiliation) affiliationContent.append(document.createTextNode(person.previousAffiliation));
+        for (const [label, content] of [["Lab", labContent(person)], ["Email", emailContent(person)], ["Prior affiliation", affiliationContent], ["Site", siteContent(person)]]) {
           if (!content.hasChildNodes()) continue;
           const line = makeText("span", "detail-line", "");
           line.append(makeText("span", "detail-label", label));
