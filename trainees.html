@@ -415,6 +415,16 @@
     const sortModes = new Map();
     const defaultSort = { key: "first", dir: 1 };
 
+    function reportEmbeddedHeight() {
+      if (window.parent === window) return;
+      const height = document.body.scrollHeight;
+      window.parent.postMessage({ type: "cns-trainee-directory:resize", height }, window.location.origin);
+    }
+
+    const embeddedHeightObserver = new ResizeObserver(reportEmbeddedHeight);
+    embeddedHeightObserver.observe(directory);
+    window.addEventListener("resize", reportEmbeddedHeight);
+
     function sortPeople(people, { key, dir }) {
       const labText = (person) => labContent(person).textContent;
       const fields = key === "last" ? ["last", "first"] : ["first", "last"];

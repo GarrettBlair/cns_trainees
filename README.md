@@ -73,3 +73,9 @@ This reads the published sheet and `sources/faculty-directory.json`, applies the
 - **It is a snapshot.** Regenerate and re-paste whenever the sheet or faculty roster changes.
 - Other options: `--out=<file>` and `--csv=<url or local file>` (for example a downloaded copy if the sheet is unavailable).
 - The page and the generator share their data logic in `directory-core.js`, so the two stay consistent.
+
+## Embed the interactive directory
+
+To retain search, role filtering, archiving, and compact view on the website, use `trainees-iframe.html` as the website's `/trainees` page. It embeds the working app at `https://garrettjblair.com/cns_trainees/trainees.html` and resizes the frame as its content changes. The iframe app and its dependencies must remain deployed at that URL; the app reports height updates only to a parent page on the same origin.
+
+The iframe wrapper replaces the website route, not the app files. Keep `trainees.html`, `directory-core.js`, `sources/faculty-directory.json`, and `sources/no_image.png` together under `/cns_trainees/`. The static `dist/trainees-embed.html` remains available for platforms that cannot use an interactive iframe.

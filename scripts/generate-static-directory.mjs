@@ -69,13 +69,13 @@ function renderPerson(person, linkLab) {
     lines.push(detailLine("Site", siteLinks(person.website).map((site) => link(site.href, site.text, true)).join("; ")));
   }
 
-  return `<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:16px 0;border-bottom:1px solid ${RULE};">
+  return `<div style="display:flex;flex-wrap:wrap;align-items:center;gap:24px;padding:16px 0;border-bottom:1px solid ${RULE};">
+<div style="flex:0 0 200px;max-width:100%;"><img src="${escapeHtml(options["image-url"])}" alt="Placeholder portrait for ${escapeHtml(person.name)}" width="200" style="display:block;width:200px;max-width:100%;aspect-ratio:1/1;object-fit:cover;"></div>
 <div style="flex:1 1 300px;min-width:0;">
 <h3 style="margin:0 0 3px;color:${PURPLE};font-size:1.05em;font-weight:700;line-height:1.25;">${escapeHtml(person.name)}</h3>
 ${person.role ? `<p style="margin:0 0 12px;color:${MUTED};font-weight:700;">${escapeHtml(person.role)}</p>` : ""}
 <div style="font-size:0.93em;">${lines.join("\n")}</div>
 </div>
-<div style="flex:0 0 200px;max-width:100%;"><img src="${escapeHtml(options["image-url"])}" alt="Placeholder portrait for ${escapeHtml(person.name)}" width="200" style="display:block;width:200px;max-width:100%;aspect-ratio:1/1;object-fit:cover;"></div>
 </div>`;
 }
 

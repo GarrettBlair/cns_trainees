@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trainee Directory</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 900px;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <iframe
+    id="trainee-directory"
+    src="https://garrettjblair.com/cns_trainees/trainees.html"
+    title="Interactive NYU Center for Neural Science trainee directory"
+  ></iframe>
+  <script>
+    const directoryFrame = document.querySelector("#trainee-directory");
+
+    window.addEventListener("message", (event) => {
+      if (
+        event.origin !== "https://garrettjblair.com" ||
+        event.source !== directoryFrame.contentWindow ||
+        event.data?.type !== "cns-trainee-directory:resize" ||
+        !Number.isFinite(event.data.height)
+      ) return;
+
+      directoryFrame.style.height = `${Math.max(700, Math.ceil(event.data.height))}px`;
+    });
+  </script>
+</body>
+</html>
