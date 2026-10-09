@@ -398,10 +398,11 @@
   <script type="module">
     import {
       ARCHIVE_AGE_MONTHS, PUBLISHED_CSV_URL, archiveCutoff, createFacultyLinker, groupByRole,
-      isArchived, latestPeople, parseCsv, siteLinks,
+      isArchived, latestPeople, parseCsv, profilePhotoFor, siteLinks,
     } from "./directory-core.js";
 
     const facultyRosterPath = "sources/faculty-directory.json";
+    const profilePhotosPath = "sources/profile-photos.json";
     const imagePath = "sources/no_image.png";
     const directory = document.querySelector("#directory");
     const searchInput = document.querySelector("#search");
@@ -411,6 +412,7 @@
     const archiveSummary = document.querySelector("#archive-summary");
     const compactInput = document.querySelector("#compact-view");
     let linkLab = (lab) => [{ text: lab }];
+    let profilePhotos = {};
     let allPeople = [];
     const sortModes = new Map();
     const defaultSort = { key: "first", dir: 1 };
@@ -449,6 +451,11 @@
       if (className) element.className = className;
       element.textContent = text;
       return element;
+    }
+
+    function profilePhoto(person) {
+      const photoPath = profilePhotoFor(person.name, profilePhotos);
+      return photoPath ? new URL(photoPath, document.baseURI).href : imagePath;
     }
 
     function labContent(person) {
@@ -544,8 +551,9 @@
         const archived = isArchived(person, cutoff);
         article.className = archived ? "person is-archived" : "person";
         const image = document.createElement("img");
-        image.src = imagePath;
-        image.alt = `Placeholder portrait for ${person.name}`;
+        const hasPhoto = Boolean(profilePhotoFor(person.name, profilePhotos));
+        image.src = profilePhoto(person);
+        image.alt = `${hasPhoto ? "Portrait" : "Placeholder portrait"} for ${person.name}`;
         image.addEventListener("error", () => {
           image.remove();
           article.classList.add("no-photo");
@@ -621,8 +629,9 @@
           const photoCell = row.insertCell();
           photoCell.className = "photo-col";
           const image = document.createElement("img");
-          image.src = imagePath;
-          image.alt = `Placeholder portrait for ${person.name}`;
+          const hasPhoto = Boolean(profilePhotoFor(person.name, profilePhotos));
+          image.src = profilePhoto(person);
+          image.alt = `${hasPhoto ? "Portrait" : "Placeholder portrait"} for ${person.name}`;
           image.addEventListener("error", () => image.remove(), { once: true });
           photoCell.append(image);
           const nameCell = row.insertCell();
@@ -639,6 +648,14 @@
     }
 
     async function loadDirectory() {
+      try {
+        const photoResponse = await fetch(profilePhotosPath);
+        if (!photoResponse.ok) throw new Error(`Photo index request returned ${photoResponse.status}`);
+        profilePhotos = await photoResponse.json();
+      } catch (error) {
+        console.warn("Unable to load profile photos", error);
+      }
+
       try {
         const facultyResponse = await fetch(facultyRosterPath);
         if (!facultyResponse.ok) throw new Error(`Faculty roster request returned ${facultyResponse.status}`);

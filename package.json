@@ -4,9 +4,12 @@
   "type": "module",
   "scripts": {
     "update:faculty": "node scripts/update-faculty-directory.mjs",
+    "photos:index": "node scripts/generate-profile-photo-index.mjs",
     "build:embed": "node scripts/generate-static-directory.mjs"
   },
   "dependencies": {
-    "cheerio": "^1.2.0"
+    "cheerio": "^1.2.0",
+    "heic-convert": "^2.1.0",
+    "sharp": "^0.35.5"
   }
 }

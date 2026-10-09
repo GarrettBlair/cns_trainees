@@ -3,14 +3,11 @@ Testing site for a CNS trainee directory.
 ## Features:
 - Load trainee data directly from the published Google Sheets CSV.
 - Add timestamp-based archiving with an internal 12-month cutoff; “See archived profiles” switches to archived profiles only.
-- Use no_image.png for profile portraits and omit the image when it fails to load.
+- Use matching portraits from `photos/` and fall back to no_image.png when a profile has no photo.
 - Display multiple site links together, separated by semicolons, with branded labels for LinkedIn, GitHub, Google Scholar, and Linktree.
 - Replace manually maintained faculty links with a generated roster scraped from the public CNS and NYU Langone faculty directories.
 - Add ```npm run update:faculty``` to refresh the local roster and document the workflow.
 - Show the requested CNS IT message when trainee data fails to load.
-### To-do
-- add trainee submitted photos instead of the placeholder image (need access to drive folder images)
-
 ## Demo the trainee directory
 Prerequisites: a browser, plus either Python 3 or Node.js. No build step is needed.
 
@@ -30,7 +27,7 @@ or
   - Lab links: lab names such as "Fenton" or "Michael Long / György Buzsáki" link to the CNS or NYU Langone faculty profiles.
   - Site links: these are shortened to LinkedIn, GitHub, Google Scholar or Linktree, and multiple links share one line.
   - Archiving: profiles whose latest submission is over 12 months old are hidden. "See archived profiles" switches to the archived-only view, and the cutoff is `ARCHIVE_AGE_MONTHS` in `directory-core.js`.
-  - Photos: profiles use the placeholder no_image.png, and a profile with no loadable image simply omits it.
+  - Photos: profiles use matching images from `photos/`, with no_image.png as the fallback; a broken image is omitted.
   - Responsive layout: narrow the browser window to see the mobile layout.
 
 5. *__Optional__*: refresh the faculty roster. This needs Node.js 20.18.1 or later. (see below)
@@ -69,7 +66,7 @@ npm run build:embed
 
 This reads the published sheet and `sources/faculty-directory.json`, applies the same 12-month archive rule and faculty links as the live page, and writes `dist/trainees-embed.html`. The snippet has no scripts, `<style>` blocks or classes (everything is inline-styled), and it replaces search, filter and the archive toggle with a role link bar at the top. Paste its contents into an HTML/embed block.
 
-- **Photos must be reachable by URL.** Pasted HTML has no base path, so images use an absolute URL. The default is `https://garrettjblair.com/cns_trainees/sources/no_image.png`; override it with `npm run build:embed -- --image-url=https://example.org/no_image.png`.
+- **Photos must be reachable by URL.** Pasted HTML has no base path, so images use absolute URLs. The default photo directory is `https://garrettjblair.com/cns_trainees/`; override it with `npm run build:embed -- --photo-base-url=https://example.org/cns_trainees/`. Run `npm run photos:index` to regenerate 300x300 thumbnails in `photos/resized/` and refresh the name-to-file index; originals remain unchanged, and HEIC uploads are converted to JPEG.
 - **It is a snapshot.** Regenerate and re-paste whenever the sheet or faculty roster changes.
 - Other options: `--out=<file>` and `--csv=<url or local file>` (for example a downloaded copy if the sheet is unavailable).
 - The page and the generator share their data logic in `directory-core.js`, so the two stay consistent.

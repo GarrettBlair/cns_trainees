@@ -3,6 +3,29 @@
 export const PUBLISHED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRI-bsWtUw-xHXXn8wznvhXg3htUK4281nrDdDYrPe5OMFqlmdfYaA8GPQ-gic2QFSq7jyiNGi9bnl3/pub?gid=1236118581&single=true&output=csv";
 export const ARCHIVE_AGE_MONTHS = 12;
 
+export function normalizeProfileName(name) {
+  return stripAccents(name).toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+}
+
+const PROFILE_PHOTO_ALIASES = new Map([
+  ["Ariadna Corredera", "Ariadna Corredera Asensio"],
+  ["Christian Puzzo", "cpuzz"],
+  ["Danilo Perez", "Danilo Trinidad Perez-Rivera"],
+  ["Fisher Theodore", "Theodore Fisher"],
+  ["Gabriela Forcinito", "Gabriela Sofía Forcinito"],
+  ["Kim Jeong Woo", "Jeong Woo Kim"],
+  ["Shan Zhoukuidong", "Zhoukuidong Shan"],
+  ["Sun Jiaqiu Vince", "Vince Sun"],
+  ["Zihua (James) Chen", "James Chen"],
+  ["Adithya Rajagopalan", "Adithya Rajagopalan Echambadi"],
+  ["John Hongyu Meng", "John Meng"],
+  ["Liu Yue", "Yue Liu"],
+].map(([name, photoName]) => [normalizeProfileName(name), normalizeProfileName(photoName)]));
+
+export function profilePhotoFor(name, photos) {
+  return photos[normalizeProfileName(name)] || photos[PROFILE_PHOTO_ALIASES.get(normalizeProfileName(name))];
+}
+
 const FACULTY_ALIAS_OVERRIDES = [
   { alias: "Tony Movshon", name: "J. Anthony Movshon" },
 ];
